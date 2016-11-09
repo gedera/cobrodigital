@@ -177,15 +177,15 @@ Para poder realizar las consulta de las transacciones es necesario comunicar:
 * fecha_desde: Comienzo desde donde se quiere obtener las transacciones.
 * fecha_hasta: Fin desde donde se quiere obtener las transacciones.
 * filtros: Los filtros nos permiten obtener transacciones mas especificas:
-** nombre: Nombre del pagador.
-** concepto: Concepto de la transaccion.
-** nro_boleta: Transacciones relacionadas a una boleta especifica.
-** identificador: consiste en el nombre del identificador del pagador, mas el valor del identificador. Por ejemplo "dni: 11222333". 
-** tipo: Relacionado con la clase de transacciones. Es posible consultar los siguientes valores:
-*** egresos: Transacciones de retiro del dinero depositado por los pagadores.
-*** ingresos: Todo lo que incremente el saldo de la cuenta CobroDigital. Generalmente son sólo las cobranzas.
-*** tarjeta_credito: Solo aquellas cobranzas abonadas con tarjeta de crédito.
-*** debito_automatico: Está relacionado a los débitos realizados por CBU.
+⋅⋅* nombre: Nombre del pagador.
+⋅⋅* concepto: Concepto de la transaccion.
+⋅⋅* nro_boleta: Transacciones relacionadas a una boleta especifica.
+⋅⋅* identificador: consiste en el nombre del identificador del pagador, mas el valor del identificador. Por ejemplo "dni: 11222333". 
+⋅⋅* tipo: Relacionado con la clase de transacciones. Es posible consultar los siguientes valores:
+⋅⋅⋅* egresos: Transacciones de retiro del dinero depositado por los pagadores.
+⋅⋅⋅* ingresos: Todo lo que incremente el saldo de la cuenta CobroDigital. Generalmente son sólo las cobranzas.
+⋅⋅⋅* tarjeta_credito: Solo aquellas cobranzas abonadas con tarjeta de crédito.
+⋅⋅⋅* debito_automatico: Está relacionado a los débitos realizados por CBU.
 
 ```ruby
 comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
