@@ -18,5 +18,21 @@ module CobroDigital
       @response = client.call(request)
     end
 
+    def parse_response
+      parsed_response = JSON.parse(response.body[:webservice_cobrodigital_response][:output])
+
+      datos = []
+
+      if parsed_response['datos'].present?
+        parsed_response['datos'].each do |data|
+          _data = data.split("\"")
+          _data.delete("")
+          datos << _data
+        end
+      end
+
+      { status: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos: datos.flatten }
+    end
+
   end
 end

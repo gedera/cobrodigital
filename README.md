@@ -159,7 +159,6 @@ Obtener el string de los códigos de barras. Serán tantos como vencimientos e i
 Para la obtención de los códigos de barra es necesario comunicar:
 * numero de boleta (obtenida en la generación)
 
-
 ```ruby
 comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
 comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
@@ -199,6 +198,8 @@ filtro = { CobroDigital.Transaccion::FILTRO_TIPO          => CobroDigital.Transa
            CobroDigital.Transaccion::FILTRO_IDENTIFICADOR => "Algun identificar" }
 ```
 
+En el siguiente ejemplo se consultan todas las transacciones de ingreso.
+
 ```ruby
 comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
 comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
@@ -209,13 +210,30 @@ transacciones.call(comercio_id, comercio_sid)
 transacciones.response # Obtengo el resultado.
 ```
 
+## Respuesta y Parser de Respuesta
+La response proveniente del WS de CobroDigital siempre consiste en un JSON, donde los datos relevantes son: 
+* resultado: Si fue correcta la consulta realizada.
+* log: En caso de no ser exitosa la consulta, mostrara los errores de la misma.
+* datos: Resultado obtenido de la consulta (Es opcional, depende de la consulta)
+
+El metodo _call_ guarda el resultado de la comunicación en el atributo **response** del objeto, por lo que siempres sera posible consultar la **Response**.
+
+A traves del metodo **parse_response** es posible obenter la respuesta parseada en formato hash. Este metodo debe llamarse luego de haberse ejecutado el _call_, 
+
+```ruby
+comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
+comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
+numero_boleta = 123
+boleta = CobroDigital.Boleta.obtener_codigo_de_barras(numero_boleta)
+boleta.call(comercio_id, comercio_sid)
+boleta.parse_response
+
+{ :resultado => true, :log => ["Codigos de barra de la boleta encontrados correctamente."], :datos => ["73852040502403101111600000002"] }
+```
+
 ## SOAP vs HTTPS
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+En construcción.
 
 ## Contributing
 
