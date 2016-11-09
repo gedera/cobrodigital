@@ -1,14 +1,14 @@
 # CobroDigital
 
-Adaptador para comunicarse con el servicio WS de CobroDigital (Version 3.0).
+Adaptador para comunicarse con el servicio WS de [CobroDigital](http://cobrodigital.com) (Version 3.0).
 
-Para poder hacer uso de la gema. Requiere previamente comunicarse con CobroDigital para dar de alta el comercio que se hará uso del servicio (Es posible solicitar datos de prueba). Ellos harán entrega de:
+Para poder hacer uso de la gema. Requiere previamente comunicarse con [CobroDigital](http://cobrodigital.com) para dar de alta el comercio que hará uso del servicio (Es posible solicitar datos de prueba). Ellos harán entrega de:
 
-* id del comercio (requerido para cualquier comunicación con el webservice, es la manera de identificarse con el webservice)
-* sid del comercio (requerido para cualquier comunicación con el webservice, es la manera de identificarse con el webservice)
-* Estructura de pagador (Esta estructura debe ser informada por cada comercio. esta estructura es del cliente a facturar)
-* Plantilla, modelo de boleta para los clientes.
-* Manual de implementación.
+* **id del comercio** (requerido para cualquier comunicación con el webservice, es la manera de identificarse con el webservice)
+* **sid del comercio** (requerido para cualquier comunicación con el webservice, es la manera de identificarse con el webservice)
+* **Estructura de pagador** (Esta estructura debe ser informada por cada comercio. esta estructura es del cliente a facturar)
+* **Plantilla**, modelo de boleta para los clientes.
+* **Manual de implementación**.
 
 ## Instalación
 
@@ -46,7 +46,7 @@ Para la creación de un pagador simplemente es necesario comunicar:
 ```ruby
 comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
 comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
-estructura_pagador = 'Apellido y nombres' => "Santos Torrealba", 'Id' => 1234, 'Documento' => 33123456, 'Direccion del cliente' => "Falsa 1234", 'Telefono' => "222314", 'E-mail' => "santos.torrealba@who.com" # Estructura brindada por cobrodigital para realizar pruebas
+estructura_pagador = { 'Apellido y nombres' => "Santos Torrealba", 'Id' => 1234, 'Documento' => 33123456, 'Direccion del cliente' => "Falsa 1234", 'Telefono' => "222314", 'E-mail' => "santos.torrealba@who.com" } # Estructura brindada por cobrodigital para realizar pruebas
 pagador = CobroDigital.Pagador.crear(estructura_pagador)
 pagador.call(comercio_id, comercio_sid)
 pagador.response # Obtengo el resultado.
@@ -64,7 +64,7 @@ Para la edición de un pagador simplemente es necesario comunicar:
 ```ruby
 comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
 comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
-estructura_pagador = 'Apellido y nombres' => "Probando Probando", 'Id' => 1234, 'Documento' => 33123456, 'Direccion del cliente' => "Falsa 1234", 'Telefono' => "222314", 'E-mail' => "santos.torrealba@who.com" # Estructura brindada por cobrodigital para realizar pruebas
+estructura_pagador = { 'Apellido y nombres' => "Probando Probando", 'Id' => 1234, 'Documento' => 33123456, 'Direccion del cliente' => "Falsa 1234", 'Telefono' => "222314", 'E-mail' => "santos.torrealba@who.com" } # Estructura brindada por cobrodigital para realizar pruebas
 pagador = CobroDigital.Pagador.editar('id', 1234, estructura_pagador)
 pagador.call(comercio_id, comercio_sid)
 pagador.response # Obtengo el resultado.
@@ -154,7 +154,7 @@ boleta.response # Obtengo el resultado.
 
 #### Obtener codigo de barras
 
-Obtener el string de los códigos de barras. Serán tantos como vencimientos e importes informados. En caso de querer renderizarlo a imagen deberá de hacer uso del código 128b, para ello se puede hacer uso de la gema barby.
+Obtener el string de los códigos de barras. Serán tantos como vencimientos e importes informados. En caso de querer renderizarlo a imagen deberá de hacer uso del código 128b, para ello se puede hacer uso de la gema [barby](http://toreto.re/barby/).
 
 Para la obtención de los códigos de barra es necesario comunicar:
 * numero de boleta (obtenida en la generación)
