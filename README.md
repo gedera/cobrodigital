@@ -177,25 +177,6 @@ Para poder realizar las consulta de las transacciones es necesario comunicar:
 * fecha_desde: Comienzo desde donde se quiere obtener las transacciones.
 * fecha_hasta: Fin desde donde se quiere obtener las transacciones.
 * filtros: Los filtros nos permiten obtener transacciones mas especificas:
-⋅⋅* nombre: Nombre del pagador.
-⋅⋅* concepto: Concepto de la transaccion.
-⋅⋅* nro_boleta: Transacciones relacionadas a una boleta especifica.
-⋅⋅* identificador: consiste en el nombre del identificador del pagador, mas el valor del identificador. Por ejemplo "dni: 11222333". 
-⋅⋅* tipo: Relacionado con la clase de transacciones. Es posible consultar los siguientes valores:
-⋅⋅⋅* egresos: Transacciones de retiro del dinero depositado por los pagadores.
-⋅⋅⋅* ingresos: Todo lo que incremente el saldo de la cuenta CobroDigital. Generalmente son sólo las cobranzas.
-⋅⋅⋅* tarjeta_credito: Solo aquellas cobranzas abonadas con tarjeta de crédito.
-⋅⋅⋅* debito_automatico: Está relacionado a los débitos realizados por CBU.
-
-```ruby
-comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
-comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
-numero_boleta = 123
-filtro = { CobroDigital.Transaccion::FILTRO_TIPO => CobroDigital.Transaccion::FILTRO_TIPO_INGRESO} # Solo consulta por transacciones de ingreso
-transacciones = CobroDigital.Transaccion.consultar(Date.today - 1.year, Date.today)
-transacciones.call(comercio_id, comercio_sid)
-transacciones.response # Obtengo el resultado.
-```
 
 Para consultar los tipos de filtros, se puede consultar las siguientes constantes:
 
@@ -218,6 +199,15 @@ filtro = { CobroDigital.Transaccion::FILTRO_TIPO          => CobroDigital.Transa
            CobroDigital.Transaccion::FILTRO_IDENTIFICADOR => "Algun identificar" }
 ```
 
+```ruby
+comercio_id = 'HA765587' #Brindado por cobrodigital para realizar pruebas
+comercio_sid = 'wsZ0ya68K791phuu76gQ5L662J6F2Y4j7zqE2Jxa3Mvd22TWNn4iip6L9yq' #Brindado por cobrodigital para realizar pruebas
+numero_boleta = 123
+filtro = { CobroDigital.Transaccion::FILTRO_TIPO => CobroDigital.Transaccion::FILTRO_TIPO_INGRESO} # Solo consulta por transacciones de ingreso
+transacciones = CobroDigital.Transaccion.consultar(Date.today - 1.year, Date.today)
+transacciones.call(comercio_id, comercio_sid)
+transacciones.response # Obtengo el resultado.
+```
 
 ## SOAP vs HTTPS
 
