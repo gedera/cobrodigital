@@ -30,7 +30,7 @@ module CobroDigital
 
       datos = parsed_response['datos'].present? ? (JSON.parse(JSON.parse(output)['datos'].first) rescue []) : []
 
-      { status: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos:  datos }
+      { resultado: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos:  datos }
     end
 
   end

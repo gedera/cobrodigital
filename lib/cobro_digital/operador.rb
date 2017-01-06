@@ -31,7 +31,7 @@ module CobroDigital
         end
       end
 
-      { status: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos: datos.flatten }
+      { resultado: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos: datos.flatten }
     end
 
   end
