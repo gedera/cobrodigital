@@ -6,6 +6,7 @@ require "cobro_digital/boleta"
 require "cobro_digital/transaccion"
 require "cobro_digital/micrositio"
 require "cobro_digital/meta"
+require "savon"
 
 module CobroDigital
 
