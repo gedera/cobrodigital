@@ -1,21 +1,22 @@
 module CobroDigital
   class Operador
 
-    attr_accessor :http_method, :webservice, :render, :response
+    attr_accessor :http_method, :webservice, :render, :response, :client
 
     def initialize(attrs={})
       @http_method = attrs[:http_method]
       @webservice  = attrs[:webservice]
       @render      = attrs[:render]
+      @client      = nil
     end
 
     def request
       { :metodo_webservice => @webservice }.merge(render)
     end
 
-    def call(id_comercio, sid, opt={})
-      client = CobroDigital::Client.new(opt.merge(:id_comercio => id_comercio, :sid => sid, :http_method => http_method))
-      @response = client.call(request)
+    def call(id_comercio, sid, opt = {})
+      @client = CobroDigital::Client.new(opt.merge(:id_comercio => id_comercio, :sid => sid, :http_method => http_method))
+      @response = @client.call(request)
     end
 
     def parse_response

@@ -15,13 +15,21 @@ module CobroDigital
     FILTRO_TIPO_TARJETA_CREDITO   = 'tarjeta_credito'   # Solo aquellas cobranzas abonadas con tarjeta de crédito.
     FILTRO_TIPO_DEBITO_AUTOMATICO = 'debito_automatico' # Está relacionado a los débitos realizados por CBU.
 
+    def self.render(desde, hasta, filtros = {})
+      {
+        :desde   => desde.strftime('%Y%m%d'),
+        :hasta   => hasta.strftime('%Y%m%d'),
+        :filtros => filtros
+      }
+    end
+
     # { 'desde'=>'20160932', 'hasta'=>'20161001' }
-    def self.consultar(desde, hasta, filtros={})
-      CobroDigital::Transaccion.new( :http_method => CobroDigital::Https::GET,
-                                     :webservice  => CONSULTAR_TRANSACCIONES_WS,
-                                     :render      => { :desde   => desde.strftime('%Y%m%d'),
-                                                       :hasta   => hasta.strftime('%Y%m%d'),
-                                                       :filtros => filtros } )
+    def self.consultar(desde, hasta, filtros = {})
+      CobroDigital::Transaccion.new(
+        :http_method => CobroDigital::Https::GET,
+        :webservice  => CONSULTAR_TRANSACCIONES_WS,
+        :render      => render(desde, hasta, filtros)
+      )
     end
 
     def parse_response

@@ -1,7 +1,7 @@
 module CobroDigital
   class Meta < CobroDigital::Operador
 
-    META_WS = 'meta'
+    META_WS = 'meta'.freeze
 
     # md5(microtime(true)*rand())
     # { 'handshake'=>Digest::MD5.hexdigest(Time.now.to_f.to_s),
@@ -38,10 +38,58 @@ module CobroDigital
 		# 	'5' => { 'metodo_webservice' => 'inhabilitar_boleta',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'nro_boleta' => '65' } }
-    def self.meta(params)
-      CobroDigital::Meta.new( :http_method => CobroDigital::Https::POST,
-                              :webservice  => META_WS,
-                              :render      => params )
+
+    def self.transaction(desde, hasta, filtros = {})
+      filter = {
+        ::CobroDigital::Transaccion::FILTRO_TIPO => ::CobroDigital::Transaccion::FILTRO_TIPO_INGRESO
+      }
+
+      filter.merge!(filtros) unless filtros.empty?
+
+      CobroDigital::Transaccion.consultar(
+        desde,
+        hasta,
+        filter
+      )
+    end
+
+    def self.render(objs)
+      querys = {}
+      objs.each_with_index do |obj, i|
+        querys[i] = obj.render.merge(metodo_webservice: obj.webservice)
+      end
+      querys
+    end
+
+    def self.meta(objs)
+      CobroDigital::Meta.new(
+        :http_method => CobroDigital::Https::POST,
+        :webservice  => META_WS,
+        :render      => render(objs)
+      )
+    end
+
+    def parse_response
+      output = response.body[:webservice_cobrodigital_response][:output]
+      parsed_response = JSON.parse(output)
+
+      datos = parsed_response['datos'].map do |data|
+        parsed_data = JSON.parse(data)
+
+        local_data = if parsed_data['datos'].present?
+                       JSON.parse(parsed_data['datos'].first) rescue []
+                     else
+                       []
+                     end
+
+        { resultado: (parsed_data['ejecucion_correcta'] == '1'),
+          log: parsed_data['log'],
+          datos: local_data }
+      end
+
+      { resultado: (parsed_response['ejecucion_correcta'] == '1'),
+        log: parsed_response['log'],
+        datos: datos }
     end
 
   end

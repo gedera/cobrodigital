@@ -24,7 +24,7 @@ module CobroDigital
 
   class Client
 
-    attr_accessor :id_comercio, :sid, :client_to_use, :http_method, :pagadores, :boletas, :transacciones, :micrositios, :requests
+    attr_accessor :id_comercio, :sid, :client_to_use, :http_method, :pagadores, :boletas, :transacciones, :micrositios, :requests, :request_xml
 
     def initialize(attrs={})
       @id_comercio    = attrs[:id_comercio]
@@ -35,10 +35,14 @@ module CobroDigital
       @boletas        = []
       @transacciones  = []
       @micrositios    = []
+      @request_xml    = nil
     end
 
     def soap_client(params)
-      client = Savon.client( wsdl: CobroDigital::WSDL, log_level: :debug, pretty_print_xml: true)
+      client = Savon.client(wsdl: CobroDigital::WSDL, log_level: :debug, pretty_print_xml: true)
+      operation = client.operation(:webservice_cobrodigital)
+      request = operation.build(message: { 'parametros_de_entrada' => params.to_json })
+      @request_xml = request.pretty
       client.call(:webservice_cobrodigital, message: { 'parametros_de_entrada' => params.to_json })
     end
 
