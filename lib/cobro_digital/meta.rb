@@ -71,21 +71,24 @@ module CobroDigital
 
     def parse_response
       output = response.body[:webservice_cobrodigital_response][:output]
+
       parsed_response = JSON.parse(output)
 
-      datos = parsed_response['datos'].map do |data|
-        parsed_data = JSON.parse(data)
+      datos = if parsed_response.key?('datos')
+                parsed_response['datos'].map do |data|
+                  parsed_data = JSON.parse(data)
 
-        local_data = if parsed_data['datos'].present?
-                       JSON.parse(parsed_data['datos'].first) rescue []
-                     else
-                       []
-                     end
+                  local_data = if parsed_data['datos'].present?
+                                 JSON.parse(parsed_data['datos'].first) rescue []
+                               else
+                                 []
+                               end
 
-        { resultado: (parsed_data['ejecucion_correcta'] == '1'),
-          log: parsed_data['log'],
-          datos: local_data }
-      end
+                  { resultado: (parsed_data['ejecucion_correcta'] == '1'),
+                    log: parsed_data['log'],
+                    datos: local_data }
+                end
+              end
 
       { resultado: (parsed_response['ejecucion_correcta'] == '1'),
         log: parsed_response['log'],
