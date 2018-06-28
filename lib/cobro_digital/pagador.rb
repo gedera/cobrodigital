@@ -1,10 +1,11 @@
 module CobroDigital
   class Pagador < CobroDigital::Operador
 
-    CREAR_PAGADOR_WS              = 'crear_pagador'
-    EDITAR_PAGADOR_WS             = 'editar_pagador'
-    VERIFICAR_PAGADOR_WS          = 'verificar_existencia_pagador'
-    OBTENER_CODIGO_ELECTRONICO_WS = 'obtener_codigo_electronico'
+    CREAR_PAGADOR_WS                  = 'crear_pagador'
+    EDITAR_PAGADOR_WS                 = 'editar_pagador'
+    VERIFICAR_PAGADOR_WS              = 'verificar_existencia_pagador'
+    OBTENER_CODIGO_ELECTRONICO_WS     = 'obtener_codigo_electronico'
+    CONSULTAR_ESTRUCTURA_PAGADORES_WS = 'consultar_estructura_pagadores'
 
     # { 'Nombre' => 'Juan', 'Su_identificador' => '1AF8', 'Unidad' => '201' }
     def self.crear(pagador)
@@ -35,6 +36,12 @@ module CobroDigital
                                  :webservice  => OBTENER_CODIGO_ELECTRONICO_WS,
                                  :render      => { :identificador => identificador,
                                                    :buscar        => buscar })
+    end
+
+    def self.estructura_de_datos
+      CobroDigital::Pagador.new(:http_method => CobroDigital::Https::GET,
+                                :webservice  => CONSULTAR_ESTRUCTURA_PAGADORES_WS,
+                                :render      => {})
     end
   end
 end
