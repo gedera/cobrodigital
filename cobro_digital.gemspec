@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Adaptador CobroDigital"
   spec.description   = "Adaptador para el Web Service de CobroDigital"
-  spec.homepage      = "https://github.com/gedera/cobro_digital"
+  spec.homepage      = "https://github.com/gedera/cobrodigital"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
