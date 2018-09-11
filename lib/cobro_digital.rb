@@ -16,6 +16,7 @@ module CobroDigital
   CLIENTS = [SOAP, HTTPS]
   URI     = 'https://www.cobrodigital.com:14365/ws3/'
   WSDL    = 'https://www.cobrodigital.com:14365/ws3/?wsdl'
+  TIMEOUT = 300
 
   module Https
     POST = 'Post'
@@ -39,10 +40,17 @@ module CobroDigital
     end
 
     def soap_client(params)
-      client = Savon.client(wsdl: CobroDigital::WSDL, log_level: :debug, pretty_print_xml: true)
+      client = Savon.client(
+        wsdl: CobroDigital::WSDL,
+        log_level: :debug,
+        pretty_print_xml: true,
+        open_timeout: CobroDigital::TIMEOUT,
+        read_timeout: CobroDigital::TIMEOUT
+      )
       operation = client.operation(:webservice_cobrodigital)
       request = operation.build(message: { 'parametros_de_entrada' => params.to_json })
       @request_xml = request.pretty
+
       client.call(:webservice_cobrodigital, message: { 'parametros_de_entrada' => params.to_json })
     end
 
@@ -57,7 +65,15 @@ module CobroDigital
         req = "Net::HTTP::#{http_method}".constantize.new(uri)
       end
 
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == CobroDigital::HTTPS) { |http| http.request(req) }
+      Net::HTTP.start(
+        uri.hostname,
+        uri.port,
+        use_ssl: uri.scheme == CobroDigital::HTTPS,
+        open_timeout: CobroDigital::TIMEOUT,
+        read_timeout: CobroDigital::TIMEOUT
+      ) do |http|
+        http.request(req)
+      end
     end
 
     def call(request)
