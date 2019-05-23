@@ -5,18 +5,18 @@ module CobroDigital
 
     # md5(microtime(true)*rand())
     # { 'handshake'=>Digest::MD5.hexdigest(Time.now.to_f.to_s),
-		# 	'metodo_webservice'=>'meta',
-		# 	'0' => { 'metodo_webservice' => 'crear_pagador',
+    #   'metodo_webservice'=>'meta',
+    #   '0' => { 'metodo_webservice' => 'crear_pagador',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'pagador' => { 'Nombre' => 'Juan',
     #                           'Su_identificador' => '1AF8',
     #                           'Unidad' => '201' } },
-		# 	'1' => { 'metodo_webservice' => 'crear_pagador',
+    #   '1' => { 'metodo_webservice' => 'crear_pagador',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'pagador'=> { 'Nombre'=>'Pedro',
     #                          'Su_identificador'=>'1AG9',
     #                          'Unidad'=>'202' } },
-		# 	'2' => { 'metodo_webservice' => 'generar_boleta',
+    #   '2' => { 'metodo_webservice' => 'generar_boleta',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'identificador' => 'Su_identificador',
     #            'buscar' => '1AF8',
@@ -24,7 +24,7 @@ module CobroDigital
     #            'fechas_vencimiento' => ['20160930'],
     #            'plantilla' => 'init',
     #            'concepto' => 'Test I'},
-		# 	'3' => { 'metodo_webservice' => 'generar_boleta',
+    #   '3' => { 'metodo_webservice' => 'generar_boleta',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'identificador' => 'Su_identificador',
     #            'buscar' => '1AG9',
@@ -32,10 +32,10 @@ module CobroDigital
     #            'fechas_vencimiento' => ['20160929'],
     #            'plantilla' => 'init',
     #            'concepto' => 'Test II'},
-		# 	'4' => { 'metodo_webservice' => 'inhabilitar_boleta',
+    #   '4' => { 'metodo_webservice' => 'inhabilitar_boleta',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'nro_boleta' => '4' },
-		# 	'5' => { 'metodo_webservice' => 'inhabilitar_boleta',
+    #   '5' => { 'metodo_webservice' => 'inhabilitar_boleta',
     #            'handshake' => Digest::MD5.hexdigest(Time.now.to_f.to_s),
     #            'nro_boleta' => '65' } }
 
@@ -68,32 +68,5 @@ module CobroDigital
         :render      => render(objs)
       )
     end
-
-    def parse_response
-      output = response.body[:webservice_cobrodigital_response][:output]
-
-      parsed_response = JSON.parse(output)
-
-      datos = if parsed_response.key?('datos')
-                parsed_response['datos'].map do |data|
-                  parsed_data = JSON.parse(data)
-
-                  local_data = if parsed_data['datos'].present?
-                                 JSON.parse(parsed_data['datos'].first) rescue []
-                               else
-                                 []
-                               end
-
-                  { resultado: (parsed_data['ejecucion_correcta'] == '1'),
-                    log: parsed_data['log'],
-                    datos: local_data }
-                end
-              end
-
-      { resultado: (parsed_response['ejecucion_correcta'] == '1'),
-        log: parsed_response['log'],
-        datos: datos }
-    end
-
   end
 end

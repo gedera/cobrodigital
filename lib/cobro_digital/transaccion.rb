@@ -31,15 +31,5 @@ module CobroDigital
         :render      => render(desde, hasta, filtros)
       )
     end
-
-    def parse_response
-      output = response.body[:webservice_cobrodigital_response][:output]
-      parsed_response = JSON.parse(output)
-
-      datos = parsed_response['datos'].present? ? (JSON.parse(JSON.parse(output)['datos'].first) rescue []) : []
-
-      { resultado: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos:  datos }
-    end
-
   end
 end

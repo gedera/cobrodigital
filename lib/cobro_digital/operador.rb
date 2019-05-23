@@ -20,20 +20,16 @@ module CobroDigital
     end
 
     def parse_response
-      parsed_response = JSON.parse(response.body[:webservice_cobrodigital_response][:output])
+      output = response.body[:webservice_cobrodigital_response][:output]
+      parsed_response = JSON.parse(output)
 
-      datos = []
+      raw_datos = parsed_response['datos'] || []
 
-      if parsed_response['datos'].present?
-        parsed_response['datos'].each do |data|
-          _data = data.split("\"")
-          _data.delete("")
-          datos << _data
-        end
-      end
+      datos = raw_datos.map do |row|
+        row.is_a?(Array) ? row : (JSON.parse(row) rescue row)
+      end.flatten
 
-      { resultado: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos: datos.flatten }
+      { resultado: (parsed_response['ejecucion_correcta'] == '1'), log: parsed_response['log'], datos:  datos }
     end
-
   end
 end
