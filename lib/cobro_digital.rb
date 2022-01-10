@@ -14,8 +14,8 @@ module CobroDigital
   HTTPS   = 'https'
 
   CLIENTS = [SOAP, HTTPS]
-  URI     = 'https://cobro.digital:14365/ws3/'.freeze
-  WSDL    = 'https://cobro.digital:14365/ws3/?wsdl'.freeze
+  URI     = ((ENV['ENDPOINT_COBRODIGITAL'] || 'https://cobro.digital:14365') + '/ws3/').freeze
+  WSDL    = ((ENV['ENDPOINT_COBRODIGITAL'] || 'https://cobro.digital:14365') + '/ws3/?wsdl').freeze
 
   TIMEOUT = 300
 
