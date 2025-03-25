@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'savon', '~> 2.12.1'
 
-  spec.add_dependency 'nokogiri', '~> 1.10.10'
+  spec.add_dependency 'nokogiri', '>= 1.10.10'
   spec.add_dependency 'wasabi', '~> 3.5.0'
   spec.add_dependency 'akami', '~> 1.3.1'
   spec.add_dependency 'nori', '~> 2.6.0'
