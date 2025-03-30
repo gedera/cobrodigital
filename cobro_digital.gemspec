@@ -1,4 +1,3 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'cobro_digital/version'
@@ -27,15 +26,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 2.3.4"
-  # spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rake", ">= 13.0.6"
-  # spec.add_development_dependency "rspec"
+  spec.add_development_dependency "bundler", "~> 2.6.6"
+  spec.add_development_dependency "rake", ">= 13.2.1"
 
-  spec.add_runtime_dependency 'savon', '~> 2.12.1'
-
-  spec.add_dependency 'nokogiri', '~> 1.10.10'
-  spec.add_dependency 'wasabi', '~> 3.5.0'
-  spec.add_dependency 'akami', '~> 1.3.1'
-  spec.add_dependency 'nori', '~> 2.6.0'
+  spec.add_dependency 'savon', '~> 2.12.1'
 end
