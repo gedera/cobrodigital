@@ -60,9 +60,14 @@ module CobroDigital
     end
 
     def soap_client(params)
+      # `log: true` para que se sigan registrando errores SOAP/HTTP; la
+      # verbosidad la controla `log_level` (default :error → no loguea el body).
+      # `filters` enmascara el nodo con sid + PII como ***FILTERED*** si algo se
+      # llega a loguear. ADVERTENCIA: con COBRODIGITAL_LOG_LEVEL=debug el XML
+      # formateado incluye el sid en claro — no habilitar debug en producción.
       client = Savon.client(
         wsdl: CobroDigital::WSDL,
-        log: CobroDigital::DEBUG_LOG,
+        log: true,
         log_level: CobroDigital::LOG_LEVEL,
         filters: CobroDigital::LOG_FILTERS,
         pretty_print_xml: CobroDigital::DEBUG_LOG,
@@ -71,8 +76,9 @@ module CobroDigital
       )
       operation = client.operation(:webservice_cobrodigital)
       request = operation.build(message: { 'parametros_de_entrada' => params.to_json })
-      # El XML lleva el sid + PII del pagador: solo se retiene bajo debug explícito.
-      @request_xml = request.pretty if CobroDigital::DEBUG_LOG
+      # Contrato público: `@request_xml` siempre disponible tras el call. Retiene
+      # el XML con sid + PII en memoria — el consumidor no debe loguearlo.
+      @request_xml = request.pretty
 
       client.call(:webservice_cobrodigital, message: { 'parametros_de_entrada' => params.to_json })
     end
