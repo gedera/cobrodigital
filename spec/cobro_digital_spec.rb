@@ -59,22 +59,25 @@ end
 
 describe CobroDigital::Operador do
   describe '#parse_response' do
-    # Doble mínimo del sobre que devuelve el WS (output = JSON string).
-    FakeResponse = Struct.new(:body)
+    # Doble anónimo del sobre que devuelve el WS (output = JSON string).
+    # `let` en vez de constante para no filtrar `FakeResponse` al ExampleGroup.
+    let(:fake_response) { Struct.new(:body) }
 
     def operador_con_output(output_hash)
       op = described_class.new
-      op.response = FakeResponse.new(
+      op.response = fake_response.new(
         webservice_cobrodigital_response: { output: output_hash.to_json }
       )
       op
     end
 
     it 'decodifica resultado/log/datos de una respuesta exitosa' do
+      # 'datos' es un Array; parse_response mapea fila-por-fila. Cada fila
+      # ('Pago aprobado') no es JSON válido → cae al rescue y queda tal cual.
       op = operador_con_output(
         'ejecucion_correcta' => '1',
         'log' => ['ok'],
-        'datos' => ['Pago aprobado'] # string no-JSON: ejercita el rescue (queda tal cual)
+        'datos' => ['Pago aprobado']
       )
       parsed = op.parse_response
       expect(parsed[:resultado]).to be(true)
