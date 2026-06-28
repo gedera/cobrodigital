@@ -25,8 +25,14 @@ module CobroDigital
   # Nivel de log del cliente SOAP. Default `:error` para no filtrar el `sid`
   # ni PII del pagador a los logs de la app. Subir a `:debug` solo para
   # troubleshooting explícito (vía ENV['COBRODIGITAL_LOG_LEVEL']).
-  LOG_LEVEL = (ENV['COBRODIGITAL_LOG_LEVEL'] || 'error').to_sym
-  DEBUG_LOG = (LOG_LEVEL == :debug)
+  # Se sanea el string vacío (`COBRODIGITAL_LOG_LEVEL=`) que produciría `:""`.
+  _log_level = ENV['COBRODIGITAL_LOG_LEVEL'].to_s
+  LOG_LEVEL  = (_log_level.empty? ? 'error' : _log_level).to_sym
+  DEBUG_LOG  = (LOG_LEVEL == :debug)
+
+  # Nodo del mensaje SOAP que transporta credenciales (`sid`) y PII del pagador.
+  # Savon lo enmascara como `***FILTERED***` en el log, incluso en `:debug`.
+  LOG_FILTERS = [:parametros_de_entrada].freeze
 
   module Https
     POST = 'Post'
@@ -58,6 +64,7 @@ module CobroDigital
         wsdl: CobroDigital::WSDL,
         log: CobroDigital::DEBUG_LOG,
         log_level: CobroDigital::LOG_LEVEL,
+        filters: CobroDigital::LOG_FILTERS,
         pretty_print_xml: CobroDigital::DEBUG_LOG,
         open_timeout: CobroDigital::TIMEOUT,
         read_timeout: CobroDigital::TIMEOUT
