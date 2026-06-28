@@ -57,3 +57,29 @@ El código vive en `lib/` bajo el módulo `CobroDigital` (`lib/cobro_digital.rb`
 - `CobroDigital::VERSION` (`lib/cobro_digital/version.rb`): versión actual de la gema.
 
 Cada operación es una subclase de `Operador` que se construye con métodos de clase (constructores) y luego se ejecuta con `#call`.
+
+## 8. Mapa de conocimiento (cómo leer la doc de este repo)
+
+- **Tu conocimiento = la UNIÓN de este repo + sus asociados.** No termina en el `docs/<capa>/` local: incluye la doc de los servicios/gemas de `skills.yml`. Un flujo o pregunta que cruza repos (e2e) **no vive como doc estática** en ningún repo — se **compone on-demand recorriendo el grafo** (RFC-021): seguí las anclas (`docs/consumed/`, `**Canónico:**`) hasta los repos asociados y **unificá**.
+- **Entrá por** [`skill/SKILL.md`](skill/SKILL.md) — índice de agente; resume el contrato y linkea el detalle.
+- **Navegar una ancla cross-repo:** tomá la **key de servicio en `skills.yml`** (`services.<dep>.repo`) → ese repo es un **checkout hermano local** o alcanzable por **GitHub MCP**. No asumas que el hermano es inalcanzable. La dependencia externa de este repo (el WS de CobroDigital) es de proveedor, no del fleet: su contrato vive en `docs/consumed/` + el manual de CobroDigital.
+
+### Cobertura de capas
+
+| capa | doc | estado |
+|---|---|---|
+| interfaz (RFC-004) | [`docs/interface/interface.md`](docs/interface/interface.md) | **presente** |
+| consumidas (RFC-018) | [`docs/consumed/cobrodigital.md`](docs/consumed/cobrodigital.md) | **presente** (estructural + §c/§e enriquecidos) |
+| configuración (RFC-012) | [`docs/config/configuracion.md`](docs/config/configuracion.md) | **presente** (inventario base + §f) |
+| topología (RFC-006) | [`docs/topology/topology.md`](docs/topology/topology.md) | **presente** |
+| test (RFC-013) | [`docs/test/testing.md`](docs/test/testing.md) | **presente** (estructural + §e-§h) |
+| comportamiento (RFC-007) | [`docs/behavior/behavior.md`](docs/behavior/behavior.md) | **presente** (operación simple · batch meta) |
+| glosario (RFC-009) | [`docs/glossary/glossary.md`](docs/glossary/glossary.md) | **presente** (parcial, acreta por PR) |
+| datos (RFC-002) | — | **n/a** — gema sin DB |
+| api / operaciones (RFC-003) | — | **n/a** — consumer-only, sin superficie HTTP/CLI/eventos propia |
+| errores (RFC-020) | — | **n/a** — no define excepciones propias; propaga `Savon::*`/`JSON` (ver `consumed §d`) |
+| eventos (RFC-005) | — | **n/a** — no produce eventos |
+| seguridad (RFC-017) | — | **n/a** — sin Pundit/Current; auth es la credencial de comercio (ver `consumed §a`) |
+| multi-tenancy (RFC-023) | — | **n/a** — el tenant es el `id_comercio` por llamada, no hay scoping server-side |
+| data-lifecycle (RFC-026) | — | **n/a** — sin persistencia propia |
+| release (RFC-014) | — | **pendiente** — se materializa con `/gem-release` |
