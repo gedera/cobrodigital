@@ -10,6 +10,7 @@ require "savon"
 require "net/http"
 require "uri"
 require "digest"
+require "json"
 
 module CobroDigital
 
@@ -46,7 +47,7 @@ module CobroDigital
     def initialize(attrs={})
       @id_comercio    = attrs[:id_comercio]
       @sid            = attrs[:sid]
-      @client_to_use  = attrs[:con_client].present? ? attrs[:con_client] : CobroDigital::SOAP
+      @client_to_use  = attrs[:con_client].to_s.empty? ? CobroDigital::SOAP : attrs[:con_client]
       # @with_handshake = attrs[:handshake].present? ? attrs[:handshake] : true
       @pagadores      = []
       @boletas        = []
@@ -87,11 +88,11 @@ module CobroDigital
       case http_method
       when CobroDigital::Https::POST
         uri = ::URI.parse(CobroDigital::URI)
-        req = "Net::HTTP::#{http_method}".constantize.new(uri)
+        req = Net::HTTP::Post.new(uri)
         req.set_form_data(params)
       when CobroDigital::Https::GET
         uri = ::URI.parse([CobroDigital::URI, ::URI.encode_www_form(params)].join('?'))
-        req = "Net::HTTP::#{http_method}".constantize.new(uri)
+        req = Net::HTTP::Get.new(uri)
       end
 
       Net::HTTP.start(
