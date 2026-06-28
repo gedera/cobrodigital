@@ -7,6 +7,9 @@ require "cobro_digital/transaccion"
 require "cobro_digital/micrositio"
 require "cobro_digital/meta"
 require "savon"
+require "net/http"
+require "uri"
+require "digest"
 
 module CobroDigital
 
@@ -18,6 +21,12 @@ module CobroDigital
   WSDL    = ((ENV['ENDPOINT_COBRODIGITAL'] || 'https://cobro.digital:14365') + '/ws3/?wsdl').freeze
 
   TIMEOUT = 300
+
+  # Nivel de log del cliente SOAP. Default `:error` para no filtrar el `sid`
+  # ni PII del pagador a los logs de la app. Subir a `:debug` solo para
+  # troubleshooting explícito (vía ENV['COBRODIGITAL_LOG_LEVEL']).
+  LOG_LEVEL = (ENV['COBRODIGITAL_LOG_LEVEL'] || 'error').to_sym
+  DEBUG_LOG = (LOG_LEVEL == :debug)
 
   module Https
     POST = 'Post'
@@ -38,19 +47,25 @@ module CobroDigital
       @transacciones  = []
       @micrositios    = []
       @request_xml    = nil
+
+      unless CobroDigital::CLIENTS.include?(@client_to_use)
+        raise ArgumentError, "client_to_use inválido: #{@client_to_use.inspect} (esperado uno de #{CobroDigital::CLIENTS.inspect})"
+      end
     end
 
     def soap_client(params)
       client = Savon.client(
         wsdl: CobroDigital::WSDL,
-        log_level: :debug,
-        pretty_print_xml: true,
+        log: CobroDigital::DEBUG_LOG,
+        log_level: CobroDigital::LOG_LEVEL,
+        pretty_print_xml: CobroDigital::DEBUG_LOG,
         open_timeout: CobroDigital::TIMEOUT,
         read_timeout: CobroDigital::TIMEOUT
       )
       operation = client.operation(:webservice_cobrodigital)
       request = operation.build(message: { 'parametros_de_entrada' => params.to_json })
-      @request_xml = request.pretty
+      # El XML lleva el sid + PII del pagador: solo se retiene bajo debug explícito.
+      @request_xml = request.pretty if CobroDigital::DEBUG_LOG
 
       client.call(:webservice_cobrodigital, message: { 'parametros_de_entrada' => params.to_json })
     end
@@ -58,11 +73,11 @@ module CobroDigital
     def https_client(params)
       case http_method
       when CobroDigital::Https::POST
-        uri = URI(CobroDigital::URI)
+        uri = ::URI.parse(CobroDigital::URI)
         req = "Net::HTTP::#{http_method}".constantize.new(uri)
         req.set_form_data(params)
       when CobroDigital::Https::GET
-        uri = URI([CobroDigital::URI, URI.encode_www_form(data)].join('?'))
+        uri = ::URI.parse([CobroDigital::URI, ::URI.encode_www_form(params)].join('?'))
         req = "Net::HTTP::#{http_method}".constantize.new(uri)
       end
 
