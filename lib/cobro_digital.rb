@@ -42,6 +42,8 @@ module CobroDigital
 
   class Client
 
+    # NOTA: `sid` y `request_xml` contienen datos sensibles (credencial del
+    # comercio y XML con sid + PII del pagador). No loguear estos accessors.
     attr_accessor :id_comercio, :sid, :client_to_use, :http_method, :pagadores, :boletas, :transacciones, :micrositios, :requests, :request_xml
 
     def initialize(attrs={})
