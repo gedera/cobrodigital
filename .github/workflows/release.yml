@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
 
     steps:
     - uses: actions/checkout@v5
@@ -19,15 +18,15 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.2'
+        # Igual que el target de CI: savon ~> 2.12.1 (httpi 2.x) no corre en
+        # Ruby 3.0+, y `gem build` evalúa el gemspec con el Ruby del runner.
+        ruby-version: '2.7'
 
-    - name: Publish to RubyGems
+    - name: Build and publish to RubyGems
+      # gem push toma la credencial de GEM_HOST_API_KEY (nativo): no se escribe
+      # el secreto a disco ni queda expuesto en el process list.
       run: |
-        mkdir -p $HOME/.gem
-        touch $HOME/.gem/credentials
-        chmod 0600 $HOME/.gem/credentials
-        printf -- "---\n:rubygems_api_key: ${RUBYGEMS_API_KEY}\n" > $HOME/.gem/credentials
         gem build *.gemspec
         gem push *.gem
       env:
-        RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}

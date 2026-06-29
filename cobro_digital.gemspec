@@ -14,8 +14,8 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   # savon ~> 2.12.1 (httpi 2.x) no corre en Ruby 3.0+. El único consumer
-  # (wispro_cloud) usa Ruby 2.7.6.
-  spec.required_ruby_version = ">= 2.7"
+  # (wispro_cloud) usa Ruby 2.7.6. Tope < 3.0 hasta actualizar el stack savon.
+  spec.required_ruby_version = ['>= 2.7', '< 3.0']
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
