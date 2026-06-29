@@ -1,6 +1,6 @@
 # Glosario — cobro_digital
 
-> meta: artefacto · RFC-009 · generado arch-enrich · anclado a 45e32b7 · cobertura parcial (acreta por PR); ausencia ≠ inexistencia
+> meta: artefacto · RFC-009 · generado arch-enrich · anclado a v1.9.0 · cobertura parcial (acreta por PR); ausencia ≠ inexistencia
 
 ## 1. Resumen
 

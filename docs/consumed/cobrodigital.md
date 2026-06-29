@@ -1,6 +1,6 @@
 # Dependencias consumidas — cobro_digital → WS CobroDigital
 
-> meta: artefacto · RFC-018 · generado arch-structure + arch-enrich · anclado a 45e32b7 · cobertura estructural (§a/§b/§d) + §c/§e enriquecidos 2/2
+> meta: artefacto · RFC-018 · generado arch-structure + arch-enrich · anclado a v1.9.0 · cobertura estructural (§a/§b/§d) + §c/§e enriquecidos 2/2
 
 ## 1. Resumen
 

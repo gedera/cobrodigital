@@ -1,6 +1,6 @@
 # Interfaz — cobro_digital
 
-> meta: artefacto · RFC-004 · generado arch-structure · anclado a 45e32b7 · cobertura total de `lib/**`
+> meta: artefacto · RFC-004 · generado arch-structure · anclado a v1.9.0 · cobertura total de `lib/**`
 
 ## 1. Resumen
 
@@ -17,6 +17,9 @@ API Ruby pública de la gema adaptadora del WS de CobroDigital. Superficie: el m
 | `CobroDigital::URI` | constante (String) | endpoint `…/ws3/`; derivada de `ENV['ENDPOINT_COBRODIGITAL']` |
 | `CobroDigital::WSDL` | constante (String) | endpoint `…/ws3/?wsdl`; derivada de `ENV['ENDPOINT_COBRODIGITAL']` |
 | `CobroDigital::TIMEOUT` | constante (`300`) | open/read timeout en segundos |
+| `CobroDigital::LOG_LEVEL` | constante (Symbol) | nivel de log del cliente SOAP; derivada de `ENV['COBRODIGITAL_LOG_LEVEL']` (default `:error`) |
+| `CobroDigital::DEBUG_LOG` | constante (Boolean) | `true` si `LOG_LEVEL == :debug`; gobierna `pretty_print_xml` |
+| `CobroDigital::LOG_FILTERS` | constante (`[:parametros_de_entrada]`) | nodo SOAP enmascarado en el log (protege sid + PII) |
 | `CobroDigital::Https` | módulo | namespace de métodos HTTP |
 | `CobroDigital::Https::POST` | constante (`'Post'`) | método HTTP POST |
 | `CobroDigital::Https::GET` | constante (`'Get'`) | método HTTP GET |
@@ -31,7 +34,7 @@ API Ruby pública de la gema adaptadora del WS de CobroDigital. Superficie: el m
 | `CobroDigital::Client#micrositios` | attr_accessor | acumulador (Array, inicializa `[]`) |
 | `CobroDigital::Client#requests` | attr_accessor | sin inicializar en `#initialize` |
 | `CobroDigital::Client#request_xml` | attr_accessor | XML del último request SOAP (`#soap_client`) |
-| `CobroDigital::Client#initialize(attrs={})` | método de instancia | `attrs`: `:id_comercio`, `:sid`, `:con_client`, `:http_method` |
+| `CobroDigital::Client#initialize(attrs={})` | método de instancia | `attrs`: `:id_comercio`, `:sid`, `:con_client`, `:http_method`; levanta `ArgumentError` si `client_to_use` ∉ `CLIENTS` |
 | `CobroDigital::Client#soap_client(params)` | método de instancia | arma y ejecuta el request Savon `:webservice_cobrodigital` |
 | `CobroDigital::Client#https_client(params)` | método de instancia | ejecuta vía `Net::HTTP` (`Post`/`Get`) |
 | `CobroDigital::Client#call(request)` | método de instancia | despacha a `#{client_to_use}_client` mergeando `#comercio` |
@@ -85,7 +88,7 @@ API Ruby pública de la gema adaptadora del WS de CobroDigital. Superficie: el m
 | `CobroDigital::Meta.transaction(desde, hasta, filtros={})` | método de clase | helper que arma una `Transaccion.consultar` con filtro tipo=ingreso por default |
 | `CobroDigital::Meta.render(objs)` | método de clase | indexa N operaciones en `{ 0 => …, 1 => … }` |
 | `CobroDigital::Meta.meta(objs)` | método de clase (constructor) | POST; `render: render(objs)` |
-| `CobroDigital::VERSION` | constante (`'1.8.0'`) | versión de la gema (`lib/cobro_digital/version.rb`) |
+| `CobroDigital::VERSION` | constante (`'1.9.0'`) | versión de la gema (`lib/cobro_digital/version.rb`) |
 
 ## 3. Inferencias
 
@@ -100,5 +103,4 @@ API Ruby pública de la gema adaptadora del WS de CobroDigital. Superficie: el m
 
 - **Cobertura:** total sobre `lib/**` (8 archivos). Todos los símbolos top-level del namespace `CobroDigital` están listados.
 - **Fuera de alcance (otra capa):** el contrato del payload que cada operación envía al WS y la forma de la respuesta cruda → `docs/consumed/cobrodigital.md` (RFC-018). El significado de negocio de cada operación → `docs/glossary/` (RFC-009, `arch-enrich`).
-- **Dependencias del runtime de host:** el código usa `present?` (`Client#initialize`, ActiveSupport) y `constantize` (`Client#https_client`, ActiveSupport) sin requerir ActiveSupport — asume que el host (típicamente Rails) lo provee. No es superficie de la gema, es una precondición del entorno → ver `docs/topology/topology.md`.
-- **Bug conocido en README (no en el código):** los ejemplos usan `CobroDigital.Pagador.crear(...)` (llamada a método sobre el módulo, sintaxis inválida); la API real es `CobroDigital::Pagador.crear(...)`. Lo corrige `arch-compose` al regenerar el README.
+- **Sin dependencia de ActiveSupport (desde v1.9.0):** el código usa solo stdlib (`to_s.empty?` en `Client#initialize`, `Net::HTTP::Post/Get` en `Client#https_client`). La gema ya no asume Rails → ver `docs/topology/topology.md`.

@@ -21,11 +21,11 @@ Este repo consume skills del framework de agentes, declaradas en el manifiesto r
 
 ## 3. Entorno
 
-- Ruby: el repo no fija versión vía `.ruby-version`. El único pin de versión presente es el legacy `.travis.yml` (Ruby 1.8.7), que NO refleja el entorno de desarrollo actual; confirmar la versión de Ruby antes de asumirla.
+- Ruby: `required_ruby_version = '>= 2.7', '< 3.0'` (el stack `savon ~> 2.12.1` / httpi 2.x no corre en Ruby 3.0+). El único consumer (wispro_cloud) usa Ruby 2.7.6. La CI corre sobre Ruby 2.7.
 - Gestor de versiones: chruby (no rvm/rbenv).
-- Dependencias: gestionadas con Bundler. El `Gemfile` toma las dependencias del gemspec (`gemspec`). No hay `Gemfile.lock` versionado.
-- Dependencia de runtime: `savon ~> 2.12.1` (cliente SOAP).
-- Dependencias de desarrollo: `bundler ~> 2.6.6`, `rake >= 13.2.1` (`cobro_digital.gemspec`).
+- Dependencias: gestionadas con Bundler. El `Gemfile` toma las dependencias del gemspec (`gemspec`). No hay `Gemfile.lock` versionado (la CI resuelve con `bundler-cache`).
+- Dependencia de runtime: `savon ~> 2.12.1` (cliente SOAP). **No depende de ActiveSupport** (solo stdlib: `net/http`, `uri`, `digest`, `json`).
+- Dependencias de desarrollo: `rake >= 13.2.1`, `rspec ~> 3.13` (`cobro_digital.gemspec`).
 
 ## 4. YARD
 
@@ -42,6 +42,7 @@ Documentación incremental con la skill `yard`.
 ## 6. Releases
 
 - Publicar con la skill `/gem-release`.
+- CI/release: GitHub Actions — `.github/workflows/main.yml` (rspec en PRs/push a master) y `.github/workflows/release.yml` (build + push a RubyGems al pushear un tag `v*`, vía `GEM_HOST_API_KEY`).
 
 ## 7. Arquitectura
 
@@ -82,4 +83,4 @@ Cada operación es una subclase de `Operador` que se construye con métodos de c
 | seguridad (RFC-017) | — | **n/a** — sin Pundit/Current; auth es la credencial de comercio (ver `consumed §a`) |
 | multi-tenancy (RFC-023) | — | **n/a** — el tenant es el `id_comercio` por llamada, no hay scoping server-side |
 | data-lifecycle (RFC-026) | — | **n/a** — sin persistencia propia |
-| release (RFC-014) | — | **pendiente** — se materializa con `/gem-release` |
+| release (RFC-014) | [`.github/workflows/release.yml`](.github/workflows/release.yml) | **presente** — publicación tag-driven a RubyGems vía `/gem-release` |

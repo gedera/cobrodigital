@@ -14,13 +14,14 @@ gem 'cobro_digital'
 
 Luego `bundle`, o instalar a mano con `gem install cobro_digital`.
 
-> **Entorno:** la gema usa `present?` y `constantize` (ActiveSupport) y los ejemplos usan helpers de fecha de ActiveSupport. Asume un host que provee ActiveSupport (típicamente Rails). Ver [`docs/topology/topology.md`](docs/topology/topology.md).
+> **Ruby:** requiere `>= 2.7, < 3.0` (el stack `savon ~> 2.12.1` no corre en Ruby 3.0+). Desde v1.9.0 la gema usa solo stdlib — **no depende de ActiveSupport**. Los ejemplos con `Date#+`/`.days` son ilustrativos del host. Ver [`docs/topology/topology.md`](docs/topology/topology.md).
 
 ## Configuración
 
 | variable | default | propósito |
 |---|---|---|
 | `ENDPOINT_COBRODIGITAL` | `https://cobro.digital:14365` | endpoint base del WS (override sandbox/prod) |
+| `COBRODIGITAL_LOG_LEVEL` | `error` | nivel de log del cliente SOAP. **No usar `debug` en producción**: el XML formateado expone el `sid` + PII del pagador |
 
 Detalle: [`docs/config/configuracion.md`](docs/config/configuracion.md).
 
@@ -36,7 +37,7 @@ Detalle: [`docs/config/configuracion.md`](docs/config/configuracion.md).
 | comportamiento | [`docs/behavior/behavior.md`](docs/behavior/behavior.md) | flujos: operación simple · batch meta |
 | glosario | [`docs/glossary/glossary.md`](docs/glossary/glossary.md) | términos del dominio (pagador, boleta, transacción…) |
 | datos · api · errores · eventos · seguridad · multi-tenancy · data-lifecycle | n/a | ver Mapa de conocimiento en [`AGENTS.md`](AGENTS.md) |
-| release | _pendiente_ | se publica con `/gem-release` |
+| release | [`.github/workflows/release.yml`](.github/workflows/release.yml) | publicación a RubyGems tag-driven (`v*`) vía `/gem-release` |
 
 ## Uso
 

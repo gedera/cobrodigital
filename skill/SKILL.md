@@ -48,8 +48,9 @@ op.parse_response                  # => { resultado: Bool, log: [..], datos: [..
 - `CobroDigital::Meta` — `.meta(objs)` (batch de operaciones en una llamada)
 - `CobroDigital::Client` — transporte; `CobroDigital::VERSION`
 
-**Config:** `ENV['ENDPOINT_COBRODIGITAL']` (default `https://cobro.digital:14365`).
-Credenciales `id_comercio`/`sid` se pasan por argumento en cada `#call`, no por env.
+**Config:** `ENV['ENDPOINT_COBRODIGITAL']` (default `https://cobro.digital:14365`)
+y `ENV['COBRODIGITAL_LOG_LEVEL']` (default `error`). Credenciales `id_comercio`/`sid`
+se pasan por argumento en cada `#call`, no por env.
 
 **Gotchas:**
 - `parse_response` **no levanta excepción** ante `resultado: false` — el unhappy
@@ -57,8 +58,11 @@ Credenciales `id_comercio`/`sid` se pasan por argumento en cada `#call`, no por 
   `Savon::*` / `Net::HTTP` / `JSON::ParserError` sin envolver.
 - El WS **no controla duplicados** (`crear_pagador` es no-idempotente): el
   control de unicidad es del consumidor.
-- ActiveSupport (`present?`, `constantize`) es **dependencia implícita del host**,
-  no declarada en el gemspec.
+- `client_to_use` inválido (≠ `'soap'`/`'https'`) → `ArgumentError` en `Client.new`.
+- **No usar `COBRODIGITAL_LOG_LEVEL=debug` en producción**: el XML formateado del
+  request expone el `sid` + PII del pagador.
+- Requiere Ruby `>= 2.7, < 3.0` (stack savon 2.12). Desde v1.9.0 **no** depende de
+  ActiveSupport (solo stdlib).
 
 ## Índice de artefactos
 

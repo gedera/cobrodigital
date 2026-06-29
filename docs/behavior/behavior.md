@@ -1,6 +1,6 @@
 # Comportamiento — cobro_digital
 
-> meta: artefacto · RFC-007 · generado arch-enrich · anclado a 45e32b7 · cobertura: 2 flujos documentados; ausencia ≠ inexistencia
+> meta: artefacto · RFC-007 · generado arch-enrich · anclado a v1.9.0 · cobertura: 2 flujos documentados; ausencia ≠ inexistencia
 
 ## 1. Resumen
 

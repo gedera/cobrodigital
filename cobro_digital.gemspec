@@ -13,6 +13,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/gedera/cobrodigital"
   spec.license       = "MIT"
 
+  spec.metadata["documentation_uri"] = "https://github.com/gedera/cobrodigital/blob/v#{spec.version}/skill"
+
   # savon ~> 2.12.1 (httpi 2.x) no corre en Ruby 3.0+. El único consumer
   # (wispro_cloud) usa Ruby 2.7.6. Tope < 3.0 hasta actualizar el stack savon.
   spec.required_ruby_version = ['>= 2.7', '< 3.0']
