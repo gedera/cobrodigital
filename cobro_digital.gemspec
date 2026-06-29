@@ -13,6 +13,10 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/gedera/cobrodigital"
   spec.license       = "MIT"
 
+  # savon ~> 2.12.1 (httpi 2.x) no corre en Ruby 3.0+. El único consumer
+  # (wispro_cloud) usa Ruby 2.7.6.
+  spec.required_ruby_version = ">= 2.7"
+
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
   # if spec.respond_to?(:metadata)
@@ -26,8 +30,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 2.6.6"
   spec.add_development_dependency "rake", ">= 13.2.1"
+  spec.add_development_dependency "rspec", "~> 3.13"
 
   spec.add_dependency 'savon', '~> 2.12.1'
 end
