@@ -150,7 +150,7 @@ El transporte default es SOAP (vía `savon`). El cliente HTTPS (`Net::HTTP`) es 
 ## Desarrollo
 
 ```sh
-bundle exec rspec   # suite (ver docs/test/test.md)
+bundle exec rspec   # suite (ver docs/test/testing.md)
 bundle exec rake    # task default :spec
 ```
 

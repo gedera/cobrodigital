@@ -69,14 +69,14 @@ se pasan por argumento en cada `#call`, no por env.
 | capa | doc | estado |
 |---|---|---|
 | interfaz | [`docs/interface/interface.md`](../docs/interface/interface.md) | API Ruby pública |
-| consumidas | [`docs/consumed/cobrodigital.md`](../docs/consumed/cobrodigital.md) | WS de CobroDigital (§a/§b/§d; §c/§e pendientes de enrich) |
-| configuración | [`docs/config/configuracion.md`](../docs/config/configuracion.md) | inventario base |
+| consumidas | [`docs/consumed/cobrodigital.md`](../docs/consumed/cobrodigital.md) | WS de CobroDigital (estructural §a/§b/§d + §c/§e enriquecidos) |
+| configuración | [`docs/config/configuracion.md`](../docs/config/configuracion.md) | inventario base + §f enriquecido |
 | topología | [`docs/topology/topology.md`](../docs/topology/topology.md) | deps + modos de transporte |
 | test | [`docs/test/testing.md`](../docs/test/testing.md) | RSpec (suite mínima) |
 | comportamiento | [`docs/behavior/behavior.md`](../docs/behavior/behavior.md) | operación simple · batch meta |
 | glosario | [`docs/glossary/glossary.md`](../docs/glossary/glossary.md) | términos del dominio |
 | datos · api · errores · eventos · seguridad · multi-tenancy · data-lifecycle | — | n/a (ver Mapa de conocimiento en `AGENTS.md`) |
-| release | — | pendiente (`/gem-release`) |
+| release | [`.github/workflows/release.yml`](../.github/workflows/release.yml) | presente — publicación tag-driven a RubyGems vía `/gem-release` |
 
 ## Uso correcto / gotchas
 
