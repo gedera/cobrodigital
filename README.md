@@ -37,7 +37,7 @@ Detalle: [`docs/config/configuracion.md`](docs/config/configuracion.md).
 | comportamiento | [`docs/behavior/behavior.md`](docs/behavior/behavior.md) | flujos: operación simple · batch meta |
 | glosario | [`docs/glossary/glossary.md`](docs/glossary/glossary.md) | términos del dominio (pagador, boleta, transacción…) |
 | datos · api · errores · eventos · seguridad · multi-tenancy · data-lifecycle | n/a | ver Mapa de conocimiento en [`AGENTS.md`](AGENTS.md) |
-| release | [`.github/workflows/release.yml`](.github/workflows/release.yml) | publicación a RubyGems tag-driven (`v*`) vía `/gem-release` |
+| release | [`docs/release/release.md`](docs/release/release.md) | publicación a RubyGems tag-driven (`v*`) vía `/gem-release` |
 
 ## Uso
 

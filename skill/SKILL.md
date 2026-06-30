@@ -76,7 +76,7 @@ se pasan por argumento en cada `#call`, no por env.
 | comportamiento | [`docs/behavior/behavior.md`](../docs/behavior/behavior.md) | operación simple · batch meta |
 | glosario | [`docs/glossary/glossary.md`](../docs/glossary/glossary.md) | términos del dominio |
 | datos · api · errores · eventos · seguridad · multi-tenancy · data-lifecycle | — | n/a (ver Mapa de conocimiento en `AGENTS.md`) |
-| release | [`.github/workflows/release.yml`](../.github/workflows/release.yml) | presente — publicación tag-driven a RubyGems vía `/gem-release` |
+| release | [`docs/release/release.md`](../docs/release/release.md) | presente — publicación tag-driven a RubyGems vía `/gem-release` |
 
 ## Uso correcto / gotchas
 
