@@ -80,7 +80,7 @@ Cada operación es una subclase de `Operador` que se construye con métodos de c
 | api / operaciones (RFC-003) | — | **n/a** — consumer-only, sin superficie HTTP/CLI/eventos propia |
 | errores (RFC-020) | — | **n/a** — no define excepciones propias; propaga `Savon::*`/`JSON` (ver `consumed §d`) |
 | eventos (RFC-005) | — | **n/a** — no produce eventos |
-| seguridad (RFC-017) | — | **n/a** — sin Pundit/Current; auth es la credencial de comercio (ver `consumed §a`) |
+| seguridad (RFC-017) | [`docs/security/security.md`](docs/security/security.md) | **presente** — sin authz propia (§c/§d/§e n/a); superficie real = secrets-semántica §f (sanitización de logs sid+PII) + confianza §g (auth saliente al WS) |
 | multi-tenancy (RFC-023) | — | **n/a** — el tenant es el `id_comercio` por llamada, no hay scoping server-side |
 | data-lifecycle (RFC-026) | — | **n/a** — sin persistencia propia |
 | release (RFC-014) | [`docs/release/release.md`](docs/release/release.md) | **presente** (estructural + §b deploy/rollback/ambientes/dueño) — publicación tag-driven a RubyGems vía `/gem-release` |
