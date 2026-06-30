@@ -7,3 +7,14 @@
 /pkg/
 /spec/reports/
 /tmp/
+
+# Gemas construidas (no deben empaquetarse dentro de la gema: spec.files = git ls-files)
+*.gem
+
+# Tooling de agentes (config/skills locales, no versionados)
+/.agents/
+/.claude/
+
+# multi-vendor-feedback: perfil local + outputs de corridas
+/vendors.local.yaml
+/mvf-runs/
