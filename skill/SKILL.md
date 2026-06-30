@@ -75,7 +75,8 @@ se pasan por argumento en cada `#call`, no por env.
 | test | [`docs/test/testing.md`](../docs/test/testing.md) | RSpec (suite mínima) |
 | comportamiento | [`docs/behavior/behavior.md`](../docs/behavior/behavior.md) | operación simple · batch meta |
 | glosario | [`docs/glossary/glossary.md`](../docs/glossary/glossary.md) | términos del dominio |
-| datos · api · errores · eventos · seguridad · multi-tenancy · data-lifecycle | — | n/a (ver Mapa de conocimiento en `AGENTS.md`) |
+| seguridad | [`docs/security/security.md`](../docs/security/security.md) | secrets-semántica §f (sanitización logs sid+PII) + confianza §g (auth saliente) |
+| datos · api · errores · eventos · multi-tenancy · data-lifecycle | — | n/a (ver Mapa de conocimiento en `AGENTS.md`) |
 | release | [`docs/release/release.md`](../docs/release/release.md) | presente — publicación tag-driven a RubyGems vía `/gem-release` |
 
 ## Uso correcto / gotchas
