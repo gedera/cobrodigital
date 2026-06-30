@@ -83,4 +83,4 @@ Cada operación es una subclase de `Operador` que se construye con métodos de c
 | seguridad (RFC-017) | — | **n/a** — sin Pundit/Current; auth es la credencial de comercio (ver `consumed §a`) |
 | multi-tenancy (RFC-023) | — | **n/a** — el tenant es el `id_comercio` por llamada, no hay scoping server-side |
 | data-lifecycle (RFC-026) | — | **n/a** — sin persistencia propia |
-| release (RFC-014) | [`.github/workflows/release.yml`](.github/workflows/release.yml) | **presente** — publicación tag-driven a RubyGems vía `/gem-release` |
+| release (RFC-014) | [`docs/release/release.md`](docs/release/release.md) | **presente** (estructural + §b deploy/rollback/ambientes/dueño) — publicación tag-driven a RubyGems vía `/gem-release` |
