@@ -60,7 +60,7 @@ Todas viajan como un único método SOAP `webservice_cobrodigital` cuyo `paramet
 
 | aspecto | estado | detalle |
 |---|---|---|
-| retry | **no implementado** | la gema no reintenta; `TIMEOUT = 300s` open/read (`lib/cobro_digital.rb:20`). Cualquier reintento es responsabilidad del consumidor. |
+| retry | **no implementado** | la gema no reintenta; `TIMEOUT = 300s` open/read (`lib/cobro_digital.rb:24`). Cualquier reintento es responsabilidad del consumidor. |
 | idempotencia de escrituras | **no garantizada por el WS** | `crear_pagador` es **no idempotente**: el WS no deduplica (README §Crear Pagador: "es posible dar de alta eternamente el mismo pagador"). Reintentar a ciegas un POST puede duplicar pagadores/boletas. |
 | seguridad del reintento | condicional | **lecturas** (GET: `verificar`, `consultar_*`, `obtener_*`) son seguras de reintentar. **escrituras** (POST: `crear/editar_pagador`, `generar/inhabilitar_boleta`, `meta`) NO — verificar estado antes de reintentar. |
 | rol del `handshake` | `unknown` | se regenera por request (`Client#comercio`); no se confirmó si el WS lo usa como clave de idempotencia/anti-replay → no asumir que dedup. Verificar con el manual de CobroDigital. |

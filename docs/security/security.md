@@ -22,7 +22,7 @@ Gema cliente de un WS de pago. No tiene authn/authz propia (no recibe requests):
 | dirección | mecanismo | fuente | nota |
 |---|---|---|---|
 | entrante | n/a | — | la gema no expone superficie; no recibe requests autenticables |
-| saliente (→ WS CobroDigital) | credencial de comercio `id_comercio` + `sid` | argumento de `#call(id_comercio, sid)` — NO env, NO archivo | el host custodia la credencial y la pasa por llamada (`lib/cobro_digital.rb:51`) |
+| saliente (→ WS CobroDigital) | credencial de comercio `id_comercio` + `sid` | argumento de `Operador#call(id_comercio, sid)` (`operador.rb:17`) → almacenada en `Client#initialize` (`cobro_digital.rb:50-51`), inyectada por request vía `#comercio` (`:116`) — NO env, NO archivo | el host la pasa en cada llamada |
 | saliente — handshake | `MD5(Time.now)` por request | generado en cada request | identifica el request; se regenera automáticamente (ver `docs/behavior`) |
 
 ### §c Authz (roles · modelo · claims)
@@ -43,10 +43,10 @@ Gema cliente de un WS de pago. No tiene authn/authz propia (no recibe requests):
 
 | aspecto | decisión | binding |
 |---|---|---|
-| custodia de credencial | `id_comercio`/`sid` se pasan por argumento en cada `#call`, **no** por env ni archivo de config → la gema no persiste ni cachea la credencial; el host es el custodio | `lib/cobro_digital.rb:51` · `consumed §a` |
+| custodia de credencial | `id_comercio`/`sid` se pasan como argumento en cada `Operador#call(id_comercio, sid)`, se almacenan en `Client#initialize` y se inyectan por request vía `#comercio`, **no** por env ni archivo de config → la gema no persiste ni cachea la credencial; el host es el custodio | `operador.rb:17` · `cobro_digital.rb:50-51,116` · `consumed §a` |
 | sanitización de log | `LOG_FILTERS = [:parametros_de_entrada]` → Savon enmascara el nodo SOAP con `sid` + PII del pagador como `***FILTERED***` en el log | `lib/cobro_digital.rb:35-36` |
 | default seguro | `LOG_LEVEL` default `:error` (no loguea el body del request); configurable vía `ENV['COBRODIGITAL_LOG_LEVEL']` | `lib/cobro_digital.rb:26-31` |
-| accessors sensibles | comentario explícito: no loguear `sid` ni `request_xml` (credencial + XML con sid + PII) | `lib/cobro_digital.rb:45-47` |
+| accessors sensibles | `attr_accessor :sid, :request_xml` los expone como métodos públicos (`:47`); la no-exposición es **convención** (comentario `:45-46`, disciplina del consumidor), **no** un mecanismo técnico enforceado | `lib/cobro_digital.rb:45-47` |
 | failure-mode de seguridad | **`COBRODIGITAL_LOG_LEVEL=debug` en producción expone el `sid` en claro** en el XML formateado → no habilitar debug en prod | `lib/cobro_digital.rb:68-70` · `docs/config §f` |
 
 ### §g Confianza + zona de red (enrich)

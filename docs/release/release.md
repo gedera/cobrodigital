@@ -36,14 +36,14 @@ Gema Ruby publicada a RubyGems mediante pipeline **tag-driven** (patrón 1): el 
 | deploy | Publicación del `.gem` a **RubyGems.org** vía `gem push`, disparada por push de tag `v*` (`.github/workflows/release.yml`). No hay deploy a infraestructura: el "deploy" es la disponibilidad en el registry. Los hosts la consumen declarándola en su `Gemfile` y corriendo `bundle install`. |
 | rollback | `gem yank cobro_digital -v X.Y.Z` despublica una versión de RubyGems. **Camino preferido: publicar una versión nueva con el fix** (SemVer hacia adelante); el `yank` se reserva para release defectuoso o credencial filtrada. RubyGems **no permite re-push** del mismo número de versión — una vez publicada, esa versión es inmutable. |
 | ambientes | Sin ambientes de runtime propios (no hay `production`/`staging` — patrón 1, no patrón 3). El único "ambiente" es **RubyGems.org** como registry de publicación. El ambiente de ejecución de la gema lo define el **host consumidor** (su Ruby, su Rails/no-Rails, su stack). Build en runner efímero Ruby 2.7. |
-| dueño | Maintainer **@gedera** (autor de los commits del CHANGELOG; `homepage = github.com/gedera/cobrodigital`). Posee la credencial de publicación (`RUBYGEMS_API_KEY` en secrets del repo). |
+| dueño | Maintainer **@gedera** (`homepage = github.com/gedera/cobrodigital`; autor de los commits del CHANGELOG). Se **infiere** que custodia la credencial de publicación (`RUBYGEMS_API_KEY` en secrets del repo) — no verificable estáticamente. |
 
 ## 3. Inferencias
 
 | afirmación | confianza | a verificar |
 |---|---|---|
 | El "deploy" de la gema = disponibilidad en RubyGems tras `gem push` (no hay target de infra) | inferido | confirmar que ningún consumidor espera un artefacto adicional (imagen, paquete OS) |
-| El runner se fija a Ruby 2.7 porque `gem build` evalúa el gemspec con el Ruby del runner y savon 2.12 no soporta 3.0+ | declarado | comentario explícito en `release.yml` |
+| El runner se fija a Ruby 2.7 porque `gem build` evalúa el gemspec con el Ruby del runner y savon 2.12 no soporta 3.0+ | declarado | comentario explícito en `release.yml:23-24`, `main.yml:21` y `cobro_digital.gemspec:18-19`; la restricción dura es `required_ruby_version < 3.0` (`gemspec:20`) |
 | `/gem-release` es el orquestador local del flujo de release | inferido | declarado en CHANGELOG + AGENTS.md §6; verificar que el flujo no se corre a mano |
 
 ## 4. Cobertura y fronteras

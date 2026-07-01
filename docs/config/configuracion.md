@@ -81,6 +81,6 @@ Gema con configuración mínima: dos variables de entorno (`ENDPOINT_COBRODIGITA
 
 ## 6. Cobertura y fronteras
 
-- **Cobertura:** total. Una sola env var; resto es tuning fijo en código.
+- **Cobertura:** total. Dos env vars (`ENDPOINT_COBRODIGITAL`, `COBRODIGITAL_LOG_LEVEL`); resto es tuning fijo en código.
 - **Heurística a verificar (humano):** `ENDPOINT_COBRODIGITAL` se infiere `requerida=no` por tener default literal embebido. Confirmar que apuntar a producción vs sandbox se hace solo cambiando esta var.
 - **Sin valor real comprometido:** el inventario no incluye literales de credenciales (las credenciales no son env vars).
