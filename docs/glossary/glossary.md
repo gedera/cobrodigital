@@ -10,15 +10,15 @@ Lenguaje ubicuo del bounded context de la gema: los términos del dominio de cob
 
 ## comercio
 
-La entidad cliente de CobroDigital que usa el webservice. Se identifica en cada request con dos credenciales emitidas por CobroDigital al dar de alta: `id_comercio` (identificador público) y `sid` (secreto). No es un objeto del dominio de la gema — son argumentos de `#call` que viajan en el bloque de identificación.
+La entidad cliente de CobroDigital que usa el webservice. Se identifica en cada request con dos credenciales emitidas por CobroDigital al dar de alta: `id_comercio` (identificador público) y `sid` (secreto). No es un objeto del dominio de la gema — se pasan como argumentos al llamar la operación (`Operador#call(id_comercio, sid)`) y viajan en el bloque de identificación (`Client#comercio`) que se mergea en cada request.
 
-**Binding:** `CobroDigital::Client#id_comercio`, `CobroDigital::Client#sid`; bloque armado en `Client#comercio` (`lib/cobro_digital.rb:84`).
+**Binding:** `CobroDigital::Client#id_comercio`, `CobroDigital::Client#sid`; bloque armado en `Client#comercio` (`lib/cobro_digital.rb:115`).
 
 ## handshake
 
-Token anti-replay que acompaña la identificación del comercio en cada request: el MD5 de `Time.now.to_f`. Se regenera por llamada. El comentario `@with_handshake` (comentado en `Client#initialize`) sugiere que alguna vez fue opcional; hoy es siempre-on.
+Token que acompaña la identificación del comercio en cada request: el MD5 de `Time.now.to_f`, regenerado por llamada (propósito anti-replay **inferido**, ver §3). El comentario `@with_handshake` (comentado en `Client#initialize`) sugiere que alguna vez fue opcional; hoy es siempre-on.
 
-**Binding:** `Client#comercio` → `Digest::MD5.hexdigest(Time.now.to_f.to_s)` (`lib/cobro_digital.rb:85`).
+**Binding:** `Client#comercio` → `Digest::MD5.hexdigest(Time.now.to_f.to_s)` (`lib/cobro_digital.rb:116`).
 
 ## pagador
 
@@ -48,7 +48,7 @@ Código que habilita a los pagadores a pagar por PagosMisCuentas y LinkPagos. So
 
 String del código de barras de una boleta (uno por vencimiento/importe). Para renderizarlo a imagen se usa el código 128b (la gema no renderiza; sugiere `barby`).
 
-**Binding:** `Boleta.obtener_codigo_de_barras` → WS `obtener_codigo_de_barras`.
+**Binding:** `Boleta.obtener_codigo_de_barras` (`lib/cobro_digital/boleta.rb:28`) → WS `obtener_codigo_de_barras`.
 
 ## plantilla
 
@@ -71,11 +71,11 @@ Un movimiento de la cuenta del comercio en CobroDigital. Se consulta por rango d
 
 El sitio de pago que CobroDigital expone para un pagador. La gema consulta su **actividad** en un rango de fechas.
 
-**Binding:** `CobroDigital::Micrositio.consultar_actividad` → WS `consultar_actividad_micrositio`.
+**Binding:** `CobroDigital::Micrositio.consultar_actividad` (`lib/cobro_digital/micrositio.rb:7`) → WS `consultar_actividad_micrositio`.
 
 ## meta
 
-Operación batch: agrupa N operaciones (crear pagadores, generar/inhabilitar boletas, etc.) en una sola llamada al WS, indexadas `{ 0 => …, 1 => … }`. Cada sub-operación lleva su propio `metodo_webservice` y `handshake`.
+Operación batch: agrupa N operaciones (crear pagadores, generar/inhabilitar boletas, etc.) en una sola llamada al WS, indexadas `{ 0 => …, 1 => … }`. Cada sub-operación lleva su propio `metodo_webservice` (agregado por `Meta.render`); el `handshake` per-sub-op aparece en el ejemplo del WS pero `Meta.render` **no lo agrega hoy** — el handshake viaja a nivel del request (`#comercio`).
 
 **Binding:** `CobroDigital::Meta.meta(objs)` → WS `meta` (`lib/cobro_digital/meta.rb:64`).
 
